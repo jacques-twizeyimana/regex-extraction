@@ -1,0 +1,205 @@
+{
+  "security_report": {
+    "is_safe": false,
+    "sql_injection_attempts": [
+      "UNION SELECT",
+      "OR 1=1",
+      "--\n",
+      "--\n",
+      "--\n",
+      "--\n",
+      "--\n",
+      "--\n",
+      "--\n",
+      "--",
+      "--",
+      "--",
+      "DROP TABLE",
+      "; --"
+    ],
+    "xss_attempts": [
+      "<script>alert('XSS')</script>",
+      "javascript:",
+      "onerror=",
+      "<iframe",
+      "<object",
+      "<embed",
+      "<form action="
+    ],
+    "dangerous_tags": [
+      "<meta charset=\"utf-8\">",
+      "<script>",
+      "</script>",
+      "<iframe src=\"https://malicious-site.com\">",
+      "</iframe>",
+      "<object data=\"malware.swf\">",
+      "</object>",
+      "<embed src=\"exploit.swf\" />",
+      "<form action=\"https://phishing-site.com/steal\">",
+      "</form>"
+    ],
+    "warning": "SECURITY ALERT: Potentially malicious content detected in input. Review the injection attempts above."
+  },
+  "extracted_data": {
+    "emails": {
+      "count": 15,
+      "items": [
+        "joh*******@technova.com",
+        "sar**********@technova.co.uk",
+        "hr.**********@technova-solutions.org",
+        "sup************@technova.com",
+        "sal*******@technova.io",
+        "ali*********@example.org",
+        "bob********@construction-co.net",
+        "cha********@startup.io",
+        "new*******@technova.com",
+        "pre**@technova.com",
+        "dav****************@gmail.com",
+        "emm******@technova.com",
+        "fra*********@technova.com",
+        "gra******@technova.co.uk",
+        "use**********@subdomain.example.co.uk"
+      ],
+      "security_warnings": []
+    },
+    "urls": {
+      "count": 14,
+      "items": [
+        "https://www.technova.com",
+        "https://blog.technova.com/articles/latest",
+        "https://api.technova.io/v2/docs?format=json",
+        "https://support.technova.com/tickets/new",
+        "https://www.technova.com/careers#openings",
+        "https://portal.technova.com/login",
+        "https://api.technova.io/v2/users?limit=100",
+        "https://www.technova.com/subscribe",
+        "https://www.technova.com/press/2024/partnership",
+        "https://github.com/technova/main/pull/1234",
+        "https://docs.technova.io/api/v2/#authentication",
+        "https://malicious-site.com",
+        "https://phishing-site.com/steal",
+        "https://api.example.com/v1?key=value&other=123"
+      ],
+      "security_warnings": []
+    },
+    "phone_numbers": {
+      "count": 11,
+      "items": [
+        "******4567",
+        "******6543",
+        "*******7890",
+        "******2222",
+        "******0199",
+        "******0123",
+        "******4001",
+        "*******7890",
+        "******3456",
+        "******0123",
+        "*******4567"
+      ],
+      "security_warnings": []
+    },
+    "credit_cards": {
+      "count": 3,
+      "items": [
+        "**** **** **** 9012",
+        "**** **** **** 9903",
+        "**** **** **** 1111"
+      ],
+      "security_warnings": [
+        "Sensitive data (credit card) detected and masked: ****9012",
+        "Sensitive data (credit card) detected and masked: ****9903",
+        "Sensitive data (credit card) detected and masked: ****1111"
+      ]
+    },
+    "html_tags": {
+      "count": 39,
+      "items": [
+        "<html>",
+        "<head>",
+        "<title>",
+        "</title>",
+        "<meta charset=\"utf-8\">",
+        "</head>",
+        "<body>",
+        "<div class=\"header\" id=\"main-header\">",
+        "<h1>",
+        "</h1>",
+        "<img src=\"logo.png\" alt=\"TechNova Logo\" />",
+        "</div>",
+        "<p class=\"intro\">",
+        "</p>",
+        "<div class=\"content\">",
+        "<a href=\"https://www.technova.com/subscribe\">",
+        "</a>",
+        "<br/>",
+        "<hr />",
+        "</div>",
+        "<footer>",
+        "<p>",
+        "</p>",
+        "<span class=\"social\">",
+        "</span>",
+        "</footer>",
+        "</body>",
+        "</html>",
+        "<script>",
+        "</script>",
+        "<img src=x onerror=\"alert('hacked')\">",
+        "<iframe src=\"https://malicious-site.com\">",
+        "</iframe>",
+        "<object data=\"malware.swf\">",
+        "</object>",
+        "<embed src=\"exploit.swf\" />",
+        "<form action=\"https://phishing-site.com/steal\">",
+        "<input type=\"password\" name=\"pwd\">",
+        "</form>"
+      ],
+      "security_warnings": [
+        "Potentially dangerous HTML tag detected: <meta charset=\"utf-8\">",
+        "Potentially dangerous HTML tag detected: <script>",
+        "Potentially dangerous HTML tag detected: </script>",
+        "Potentially dangerous HTML tag detected: <iframe src=\"https://malicious-site.com\">",
+        "Potentially dangerous HTML tag detected: </iframe>",
+        "Potentially dangerous HTML tag detected: <object data=\"malware.swf\">",
+        "Potentially dangerous HTML tag detected: </object>",
+        "Potentially dangerous HTML tag detected: <embed src=\"exploit.swf\" />",
+        "Potentially dangerous HTML tag detected: <form action=\"https://phishing-site.com/steal\">",
+        "Potentially dangerous HTML tag detected: </form>"
+      ]
+    },
+    "hashtags": {
+      "count": 23,
+      "items": [
+        "#openings",
+        "#TechNovaSale",
+        "#CloudComputing",
+        "#SaaS",
+        "#EnterpriseSoftware",
+        "#TechNovaNews",
+        "#Innovation",
+        "#TechNews",
+        "#B2B",
+        "#ReleaseDay",
+        "#Coding",
+        "#Python",
+        "#TechCommunity",
+        "#OpenSource",
+        "#DevOps",
+        "#Agile",
+        "#Startup",
+        "#ORD",
+        "#authentication",
+        "#SprintReview",
+        "#Q1Goals",
+        "#Roadmap2024",
+        "#valid_hashtag_123"
+      ],
+      "security_warnings": []
+    }
+  },
+  "statistics": {
+    "total_items_found": 105,
+    "security_warnings": 13
+  }
+}
