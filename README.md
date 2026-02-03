@@ -1,16 +1,8 @@
 # Regex Data Extraction & Secure Validation Tool
 
-Hi there! 👋 Welcome to my data extraction tool.
+Welcome to my data extraction tool. It extracts structured data (like emails and credit cards) from raw text and look for malicious input.
 
-I built this Python utility to solve a common but tricky problem: extracting structured data (like emails and credit cards) from raw, messy text while keeping the system safe from malicious input.
-
-Think of it as a smart filter. It doesn't just find the data you need; it actively looks for "bad actors" like SQL injection attempts or malicious scripts and flags them before they can do any harm.
-
-## 🚀 Quick Start
-
-You don't need to install any external libraries—everything runs on standard Python 3.
-
-### Running the Tool
+## Running the Tool
 
 The easiest way to see it in action is to run it against the included sample data:
 
@@ -21,86 +13,84 @@ python3 regex_extractor.py sample_input.txt
 
 This will print a readable report to your console and save a detailed JSON file (`sample_output.json`) with the results.
 
-## 🛠 What It Extracts
+## What It Extracts
 
-I've designed regex patterns to reliably identify and extract these six specific data types:
+I've designed regex patterns to identify and extract these six specific data types:
 
-| Data Type           | Example Matches                                       |
-| ------------------- | ----------------------------------------------------- |
-| **📧 Emails**       | `jane.doe@company.com`, `contact+sales@site.org`      |
-| **🔗 URLs**         | `https://www.google.com`, `http://localhost:8080/api` |
-| **📱 Phones**       | `(555) 123-4567`, `+1 555-0199`, `123.456.7890`       |
-| **💳 Credit Cards** | `1234 5678 9012 3456`, `1234-5678-9012-3456`          |
-| **🏷️ HTML Tags**    | `<div class="main">`, `<img src="logo.png" />`        |
-| **#️⃣ Hashtags**     | `#Python`, `#coding_is_fun`                           |
+| Data Type        | Example Matches                                       |
+| ---------------- | ----------------------------------------------------- |
+| **Emails**       | `jane.doe@company.com`, `contact+sales@site.org`      |
+| **URLs**         | `https://www.google.com`, `http://localhost:8080/api` |
+| **Phones**       | `(555) 123-4567`, `+1 555-0199`, `123.456.7890`       |
+| **Credit Cards** | `1234 5678 9012 3456`, `1234-5678-9012-3456`          |
+| **HTML Tags**    | `<div class="main">`, `<img src="logo.png" />`        |
+| **Hashtags**     | `#Python`, `#coding_is_fun`                           |
 
-## 🔒 Security First
+## Security Features
 
-This isn't just a "find and replace" script. As a developer, I know that input from the wild is rarely trustworthy. Here is how I've engineered this tool to be secure by default:
+This isn't just a simple extraction script. Input from external sources is rarely trustworthy, so I've engineered this tool with several defensive layers:
 
 ### 1. Sensitive Data Masking
 
-We never want to log full credit card numbers or user emails in plain text.
+To prevent accidental exposure in logs or console output, sensitive data is partially hidden.
 
 - **Credit Cards:** Automatically masked, showing only the last 4 digits (e.g., `**** **** **** 1234`).
-- **Emails:** The username is partially hidden to protect user privacy (e.g., `jan***@example.com`).
+- **Emails:** The username is partially hidden (e.g., `jan***@example.com`).
 
 ### 2. Threat Detection
 
-The tool actively scans for patterns that look like attacks. If it sees something suspicious, it flags it in the security report rather than executing or ignoring it.
+The tool scans for patterns that indicate common attacks.
 
-- **SQL Injection:** Catches attempts like `OR 1=1`, `UNION SELECT`, or `DROP TABLE`.
+- **SQL Injection:** Detects attempts like `OR 1=1`, `UNION SELECT`, or `DROP TABLE`.
 - **XSS (Cross-Site Scripting):** Blocks `<script>` tags, `javascript:` URIs, and dangerous event handlers like `onload`.
 
 ### 3. Safe Output
 
-When printing to the console, all extracted text is sanitized. Special HTML characters are escaped so that a malicious string like `<script>alert(1)</script>` is rendered harmlessly as text, not code.
+Extracted text is sanitized when printed to the console. Special HTML characters are escaped so that a malicious string like `<script>alert(1)</script>` is rendered as literal text rather than being executed as code.
 
-## 🧠 Under the Hood: The Regex Patterns
+## Under the Hood: Regex Implementation
 
-Here is a look at the actual patterns I used. I've tuned these to balance flexibility (catching real-world formats) with strictness (ignoring garbage).
+Below are the regex patterns used for extraction, balanced for flexibility and security.
 
-**Email Address**
+### Email Address
 
-```regex
-\b[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}\b
-```
+- **Regex**: `\b[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}\b`
+- **Logic**: Matches the standard `user@domain.tld` structure. It ensures the top-level domain is at least two letters long and allows common symbols in the local part like dots, pluses, and underscores.
 
-_Why this works:_ It enforces the standard `user@domain.tld` structure, ensuring the top-level domain (like .com or .io) is at least two letters long.
+### Secure URLs
 
-**Secure URLs**
+- **Regex**: `\bhttps?://(?:www\.)?[a-zA-Z0-9][-a-zA-Z0-9]*(?:\.[a-zA-Z0-9][-a-zA-Z0-9]*)*(?:\.[a-zA-Z]{2,})?(?::\d{1,5})?(?:/[^\s<>"']*)?`
+- **Logic**: Strictly allows only `http` and `https` protocols to prevent protocol-based attacks (like `javascript:` or `file://`). It handles optional subdomains, ports, and complex paths.
 
-```regex
-\bhttps?://(?:www\.)?[a-zA-Z0-9][-a-zA-Z0-9]*(?:\.[a-zA-Z0-9][-a-zA-Z0-9]*)*(?:\.[a-zA-Z]{2,})?(?::\d{1,5})?(?:/[^\s<>"']*)?
-```
+### Credit Card Numbers
 
-_Why this works:_ I strictly allow only `http` and `https` protocols. This intentionally rejects dangerous schemes like `javascript:` or `file://` which are common vectors for attacks.
+- **Regex**: `\b(?:\d{4}[\s-]?){3}\d{4}\b`
+- **Logic**: Identifies 16-digit sequences grouped in fours. It accepts spaces or hyphens as separators, which are standard in manual entry.
 
-**Credit Cards**
+### Phone Numbers
 
-```regex
-\b(?:\d{4}[\s-]?){3}\d{4}\b
-```
+- **Regex**: `(?:\+1[\s.-]?)?\(?[0-9]{3}\)?[\s.-]?[0-9]{3}[\s.-]?[0-9]{4}\b`
+- **Logic**: Supports multiple US formats including area codes in parentheses, dot/dash/space separators, and the optional `+1` country code.
 
-_Why this works:_ It looks for 16 digits, grouped in fours, with optional space or hyphen separators. It is effective for standard card formats.
+### HTML Tags
 
-**Phone Numbers**
+- **Regex**: `</?[a-zA-Z][a-zA-Z0-9]*(?:\s+[^>]*)?\s*/?>`
+- **Logic**: Captures opening, closing, and self-closing tags. It allows for any number of attributes within the tag.
 
-```regex
-(?:\+1[\s.-]?)?\(?[0-9]{3}\)?[\s.-]?[0-9]{3}[\s.-]?[0-9]{4}\b
-```
+### Hashtags
 
-_Why this works:_ It handles the chaos of phone number formatting—dots, dashes, spaces, parentheses, and even optional country codes (+1).
+- **Regex**: `#[a-zA-Z_][a-zA-Z0-9_]*\b`
+- **Logic**: Matches words starting with `#`. It requires the first character after the hash to be a letter or underscore, preventing numeric-only tags (like #123) from being flagged.
 
-## 📂 Project Structure
+## Project Structure
 
-- `regex_extractor.py`: The main Python script containing all logic.
-- `sample_input.txt`: A test file I created with mixed valid and malicious data to demonstrate the tool's capabilities.
+- `regex_extractor.py`: The main Python script containing extraction and security logic.
+- `sample_input.txt`: A test file with mixed valid and malicious data.
 - `sample_output.json`: The structured results generated by the tool.
 - `assignment.txt`: The original requirements for this project.
 
-## 👤 Author
+## Author
 
 **Jacques Twizeyimana**  
 Junior Frontend Developer  
-_ALU Data Extraction & Secure Validation Assignment_
+ALU Data Extraction & Secure Validation Assignment
