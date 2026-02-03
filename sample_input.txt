@@ -1,0 +1,212 @@
+================================================================================
+                    SAMPLE INPUT DATA FOR REGEX EXTRACTION
+                    Company: TechNova Solutions Inc.
+                    Document Type: Mixed Communications Log
+================================================================================
+
+--- SECTION 1: COMPANY DIRECTORY ---
+
+Welcome to TechNova Solutions! Below is our internal directory.
+
+Contact Information:
+  CEO: john.smith@technova.com
+  CTO: sarah.johnson@technova.co.uk
+  HR: hr.department@technova-solutions.org
+  Support: support+tickets@technova.com
+  Sales: sales.team@technova.io
+
+For urgent matters, please use the following phone numbers:
+  Main Office: (555) 123-4567
+  Direct Line: 555-987-6543
+  International: +1 (555) 456.7890
+  Fax Machine: 555.111.2222
+  Mobile: (800) 555-0199
+
+Visit us online:
+  Website: https://www.technova.com
+  Blog: https://blog.technova.com/articles/latest
+  API Docs: https://api.technova.io/v2/docs?format=json
+  Support Portal: https://support.technova.com/tickets/new
+  Careers: https://www.technova.com/careers#openings
+
+--- SECTION 2: PRODUCT CATALOG ---
+
+Our Current Product Lineup:
+
+  📦 TechNova Pro License
+     Price: $199.99
+     Yearly Subscription: $1,499.00
+     Enterprise: $24,999.99
+     
+  📦 TechNova Cloud Storage
+     Basic (100GB): $9.99/month
+     Pro (1TB): $29.99/month
+     Enterprise: $1,234.56/month
+     
+  📦 One-time Products
+     USB Dongle: $49.99
+     Training Manual: $125.00
+     Conference Pack: $2,500.00
+
+Special Offer: Use code #TechNovaSale for 20% off!
+Trending: #CloudComputing #SaaS #EnterpriseSoftware
+
+--- SECTION 3: SUPPORT TICKET LOG ---
+
+Ticket #2024-001
+Submitted: 14:30 on January 15th
+Status: Resolved at 9:45 AM
+Customer: alice.wonder@example.org
+Issue: Cannot access portal at https://portal.technova.com/login
+
+Ticket #2024-002
+Submitted: 2:15 PM
+Updated: 16:00
+Customer: bob.builder@construction-co.net
+Phone: (212) 555-0123
+Credit Card on File: 4532 1234 5678 9012
+Issue: Payment declined - please update billing
+
+Ticket #2024-003
+Submitted: 11:30 AM
+Customer: charlie.dev@startup.io
+Issue: API returning 500 error at https://api.technova.io/v2/users?limit=100
+
+--- SECTION 4: NEWSLETTER TEMPLATE (HTML) ---
+
+<html>
+<head>
+    <title>TechNova Newsletter</title>
+    <meta charset="utf-8">
+</head>
+<body>
+    <div class="header" id="main-header">
+        <h1>Welcome to TechNova!</h1>
+        <img src="logo.png" alt="TechNova Logo" />
+    </div>
+    
+    <p class="intro">
+        Thank you for subscribing to our newsletter.
+    </p>
+    
+    <div class="content">
+        <a href="https://www.technova.com/subscribe">Subscribe Now</a>
+        <br/>
+        <hr />
+    </div>
+    
+    <footer>
+        <p>Contact: newsletter@technova.com</p>
+        <span class="social">Follow us: #TechNovaNews</span>
+    </footer>
+</body>
+</html>
+
+--- SECTION 5: SOCIAL MEDIA FEED ---
+
+@TechNovaCEO tweeted:
+"Excited to announce our new partnership! #Innovation #TechNews #B2B
+Check out the press release: https://www.technova.com/press/2024/partnership
+Contact: press@technova.com"
+
+@DevTeamLead posted:
+"Just shipped version 2.0! 🚀 #ReleaseDay #Coding #Python
+Thanks to the whole team! Meeting at 3:30 PM to celebrate.
+Call the office at 555-TECH-001 (555-832-4001) for info."
+
+Community hashtags: #TechCommunity #OpenSource #DevOps #Agile #Startup
+
+--- SECTION 6: ORDER CONFIRMATION ---
+
+Order #ORD-2024-98765
+Date: February 3, 2026
+Time: 10:15 AM
+
+Customer Information:
+  Name: David Wilson
+  Email: david.wilson+orders@gmail.com
+  Phone: +1 (415) 555-7890
+  
+Billing Information:
+  Card: 5425-2334-3010-9903
+  Exp: 12/27
+  Amount Charged: $3,456.78
+  
+  Alternative Card: 3782 822463 10005
+  
+Shipping Address:
+  123 Tech Street
+  San Francisco, CA 94102
+
+Items:
+  1x TechNova Pro License    $199.99
+  2x Cloud Storage Pro       $59.98
+  1x Enterprise Package    $3,196.81
+  
+Order placed at 22:45 (UTC)
+Expected delivery by 09:00 on Feb 10.
+
+--- SECTION 7: MEETING NOTES ---
+
+Team Standup - February 3, 2026
+Time: 9:00 AM - 9:30 AM
+
+Attendees:
+  - emma.chen@technova.com
+  - frank.miller@technova.com
+  - grace.lee@technova.co.uk
+
+Action Items:
+  1. Review PR at https://github.com/technova/main/pull/1234
+  2. Update docs at https://docs.technova.io/api/v2/#authentication
+  3. Call client at (650) 555-3456 by 4:00 PM
+  
+Next meeting: 14:00 tomorrow
+
+Follow-up hashtags for project tracking:
+#SprintReview #Q1Goals #Roadmap2024
+
+--- SECTION 8: SECURITY TEST DATA ---
+*** WARNING: This section contains test data for security validation ***
+
+Test Case 1 - SQL Injection Attempts (should be detected):
+  Username: admin' OR 1=1 --
+  Search: '; DROP TABLE users; --
+  Query: UNION SELECT * FROM passwords
+  
+Test Case 2 - XSS Attempts (should be detected):
+  Comment: <script>alert('XSS')</script>
+  Profile: <img src=x onerror="alert('hacked')">
+  Link: javascript:void(document.cookie)
+  
+Test Case 3 - Dangerous HTML:
+  <iframe src="https://malicious-site.com"></iframe>
+  <object data="malware.swf"></object>
+  <embed src="exploit.swf" />
+  <form action="https://phishing-site.com/steal">
+    <input type="password" name="pwd">
+  </form>
+
+Test Case 4 - Malformed Inputs (should NOT be extracted):
+  Invalid email: user@@double.com
+  Invalid email: missing@tld
+  Invalid email: @nodomain.com
+  Fake phone: 1234567890123 (too many digits)
+  Not a card: 1234 5678 (too short)
+  Not currency: $abc.def
+  Invalid time: 25:99 (out of range)
+  Invalid time: 13:00 AM (impossible)
+
+Test Case 5 - Edge Cases (SHOULD be extracted correctly):
+  Valid complex email: user.name+tag@subdomain.example.co.uk
+  Valid URL with query: https://api.example.com/v1?key=value&other=123
+  Valid formatted phone: +1 (555) 123-4567
+  Valid card with dashes: 4111-1111-1111-1111
+  Valid 24-hour time: 23:59
+  Valid 12-hour time: 12:00 AM
+  Valid hashtag: #valid_hashtag_123
+  Valid currency: $1,234,567.89
+
+================================================================================
+                           END OF SAMPLE INPUT
+================================================================================
