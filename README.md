@@ -1,204 +1,106 @@
 # Regex Data Extraction & Secure Validation Tool
 
-A Python-based tool that extracts structured data from raw text using regex patterns while implementing security validation to handle malicious or malformed input.
+Hi there! 👋 Welcome to my data extraction tool.
 
-## 📋 Overview
+I built this Python utility to solve a common but tricky problem: extracting structured data (like emails and credit cards) from raw, messy text while keeping the system safe from malicious input.
 
-This tool was developed as part of the ALU Data Extraction & Secure Validation Assignment. It extracts **6 different data types** from raw text and implements comprehensive security measures to detect and handle potentially malicious input.
+Think of it as a smart filter. It doesn't just find the data you need; it actively looks for "bad actors" like SQL injection attempts or malicious scripts and flags them before they can do any harm.
 
-## ✨ Features
+## 🚀 Quick Start
 
-### Data Extraction (6 Types)
+You don't need to install any external libraries—everything runs on standard Python 3.
 
-| Data Type           | Format Examples                                                 |
-| ------------------- | --------------------------------------------------------------- |
-| **Email Addresses** | `user@example.com`, `first.last@company.co.uk`                  |
-| **URLs**            | `https://www.example.com`, `https://api.example.com/v2?key=val` |
-| **Phone Numbers**   | `(123) 456-7890`, `123-456-7890`, `+1 555.123.4567`             |
-| **Credit Cards**    | `1234 5678 9012 3456`, `1234-5678-9012-3456`                    |
-| **HTML Tags**       | `<p>`, `<div class="example">`, `<img src="..." />`             |
-| **Hashtags**        | `#example`, `#ThisIsAHashtag`                                   |
+### Running the Tool
 
-### Security Features
-
-- 🔒 **Credit Card Masking**: Only last 4 digits shown in output
-- 🛡️ **SQL Injection Detection**: Detects `UNION SELECT`, `OR 1=1`, `DROP TABLE`, etc.
-- 🚫 **XSS Prevention**: Flags `<script>`, `javascript:`, event handlers
-- ⚠️ **Dangerous HTML Detection**: Identifies `<iframe>`, `<object>`, `<embed>`, `<form>`
-- 🔐 **Email Masking**: Partially masks email addresses in output
-
-## 🚀 Installation
+The easiest way to see it in action is to run it against the included sample data:
 
 ```bash
-# Clone the repository
-git clone https://github.com/YOUR_USERNAME/alu-regex.git
-cd alu-regex
-
-# No external dependencies required - uses Python standard library only
-python3 --version  # Requires Python 3.6+
+# Process the sample input file
+python3 regex_extractor.py sample_input.txt
 ```
 
-## 📖 Usage
+This will print a readable report to your console and save a detailed JSON file (`sample_output.json`) with the results.
 
-### Basic Usage
+## 🛠 What It Extracts
 
-```bash
-# Run with default sample input
-python3 regex_extractor.py
+I've designed regex patterns to reliably identify and extract these six specific data types:
 
-# Run with custom input file
-python3 regex_extractor.py your_input.txt
+| Data Type           | Example Matches                                       |
+| ------------------- | ----------------------------------------------------- |
+| **📧 Emails**       | `jane.doe@company.com`, `contact+sales@site.org`      |
+| **🔗 URLs**         | `https://www.google.com`, `http://localhost:8080/api` |
+| **📱 Phones**       | `(555) 123-4567`, `+1 555-0199`, `123.456.7890`       |
+| **💳 Credit Cards** | `1234 5678 9012 3456`, `1234-5678-9012-3456`          |
+| **🏷️ HTML Tags**    | `<div class="main">`, `<img src="logo.png" />`        |
+| **#️⃣ Hashtags**     | `#Python`, `#coding_is_fun`                           |
 
-# Specify output file
-python3 regex_extractor.py your_input.txt custom_output.json
-```
+## 🔒 Security First
 
-### Sample Output
+This isn't just a "find and replace" script. As a developer, I know that input from the wild is rarely trustworthy. Here is how I've engineered this tool to be secure by default:
 
-```
-🔍 Regex Data Extraction & Validation Tool
-   Version 1.0 - February 2026
+### 1. Sensitive Data Masking
 
-Reading input from: sample_input.txt
-Input size: 5432 characters
-Extracting data...
+We never want to log full credit card numbers or user emails in plain text.
 
-============================================================
-  REGEX DATA EXTRACTION RESULTS
-============================================================
+- **Credit Cards:** Automatically masked, showing only the last 4 digits (e.g., `**** **** **** 1234`).
+- **Emails:** The username is partially hidden to protect user privacy (e.g., `jan***@example.com`).
 
-⚠️  SECURITY WARNINGS:
-----------------------------------------
-  SQL Injection Attempts: 3
-    • OR 1=1 --
-    • DROP TABLE users
-    • UNION SELECT * FROM
-  XSS Attempts: 2
-    • <script>alert('XSS')</script>
-    • javascript:void(document.cookie)
+### 2. Threat Detection
 
-📊 EXTRACTED DATA:
-----------------------------------------
+The tool actively scans for patterns that look like attacks. If it sees something suspicious, it flags it in the security report rather than executing or ignoring it.
 
-  EMAILS: 15 found
-    • joh***@technova.com
-    • sar***@technova.co.uk
-    • hr.***@technova-solutions.org
-    • ...
+- **SQL Injection:** Catches attempts like `OR 1=1`, `UNION SELECT`, or `DROP TABLE`.
+- **XSS (Cross-Site Scripting):** Blocks `<script>` tags, `javascript:` URIs, and dangerous event handlers like `onload`.
 
-  CREDIT CARDS: 3 found
-    • **** **** **** 9012
-    • **** **** **** 9903
-    • **** **** **** 0005
+### 3. Safe Output
 
-📈 STATISTICS:
-----------------------------------------
-  Total items extracted: 87
-  Security warnings: 8
-```
+When printing to the console, all extracted text is sanitized. Special HTML characters are escaped so that a malicious string like `<script>alert(1)</script>` is rendered harmlessly as text, not code.
 
-## 🔍 Regex Patterns Explained
+## 🧠 Under the Hood: The Regex Patterns
 
-### Email Pattern
+Here is a look at the actual patterns I used. I've tuned these to balance flexibility (catching real-world formats) with strictness (ignoring garbage).
+
+**Email Address**
 
 ```regex
 \b[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}\b
 ```
 
-- `[a-zA-Z0-9._%+-]+` - Local part (username)
-- `@` - Literal @ symbol
-- `[a-zA-Z0-9.-]+` - Domain name
-- `\.[a-zA-Z]{2,}` - TLD (at least 2 characters)
+_Why this works:_ It enforces the standard `user@domain.tld` structure, ensuring the top-level domain (like .com or .io) is at least two letters long.
 
-### URL Pattern
+**Secure URLs**
 
 ```regex
-\bhttps?://(?:www\.)?[a-zA-Z0-9][-a-zA-Z0-9]*...
+\bhttps?://(?:www\.)?[a-zA-Z0-9][-a-zA-Z0-9]*(?:\.[a-zA-Z0-9][-a-zA-Z0-9]*)*(?:\.[a-zA-Z]{2,})?(?::\d{1,5})?(?:/[^\s<>"']*)?
 ```
 
-- Only allows `http://` and `https://` schemes for security
-- Rejects dangerous schemes like `javascript:` and `data:`
+_Why this works:_ I strictly allow only `http` and `https` protocols. This intentionally rejects dangerous schemes like `javascript:` or `file://` which are common vectors for attacks.
 
-### Credit Card Pattern
+**Credit Cards**
 
 ```regex
 \b(?:\d{4}[\s-]?){3}\d{4}\b
 ```
 
-- Matches 16 digits in groups of 4
-- Supports spaces or hyphens as separators
-- **Security**: Always masked in output
+_Why this works:_ It looks for 16 digits, grouped in fours, with optional space or hyphen separators. It is effective for standard card formats.
 
-### Phone Number Pattern
+**Phone Numbers**
 
 ```regex
 (?:\+1[\s.-]?)?\(?[0-9]{3}\)?[\s.-]?[0-9]{3}[\s.-]?[0-9]{4}\b
 ```
 
-- Optional country code (+1)
-- Various separator formats (spaces, dots, hyphens)
-- Parentheses optional for area code
+_Why this works:_ It handles the chaos of phone number formatting—dots, dashes, spaces, parentheses, and even optional country codes (+1).
 
-## 🛡️ Security Considerations
+## 📂 Project Structure
 
-### Why Security Matters
-
-This tool processes raw text that could come from untrusted sources. Malicious actors might try to:
-
-1. **Inject SQL commands** to manipulate databases
-2. **Embed XSS scripts** to attack web applications
-3. **Include dangerous HTML** to hijack user sessions
-
-### Defensive Measures
-
-1. **Input Validation**: All regex patterns are designed to reject obviously malformed data
-2. **Output Sanitization**: HTML special characters are escaped in console output
-3. **Data Masking**: Sensitive data (credit cards, emails, phones) is masked
-4. **Threat Detection**: Known attack patterns are identified and flagged
-5. **Safe Defaults**: Only safe URL schemes (http/https) are accepted
-
-## 📁 File Structure
-
-```
-alu-regex/
-├── regex_extractor.py   # Main extraction script
-├── sample_input.txt     # Realistic sample input data
-├── sample_output.json   # Generated output (after running)
-├── README.md            # This documentation
-├── assignment.txt       # Assignment requirements
-└── rubric.txt           # Grading rubric
-```
-
-## 📝 Sample Input Design
-
-The sample input (`sample_input.txt`) is designed to resemble real-world data:
-
-- Company directory with realistic contact information
-- Support ticket logs with mixed data types
-- HTML newsletter template
-- Social media posts with hashtags
-- Order confirmation with payment details
-- Security test cases (injection attempts, edge cases)
-
-## ✅ Testing
-
-```bash
-# Run the extractor
-python3 regex_extractor.py sample_input.txt
-
-# Check the JSON output
-cat sample_output.json | python3 -m json.tool
-
-# Test with custom input
-echo "Contact: test@email.com at (555) 123-4567" | python3 regex_extractor.py /dev/stdin
-```
-
-## 📄 License
-
-This project was created for educational purposes as part of the ALU curriculum.
+- `regex_extractor.py`: The main Python script containing all logic.
+- `sample_input.txt`: A test file I created with mixed valid and malicious data to demonstrate the tool's capabilities.
+- `sample_output.json`: The structured results generated by the tool.
+- `assignment.txt`: The original requirements for this project.
 
 ## 👤 Author
 
 **Jacques Twizeyimana**  
 Junior Frontend Developer  
-February 2026
+_ALU Data Extraction & Secure Validation Assignment_
