@@ -33,17 +33,17 @@ Visit us online:
 
 Our Current Product Lineup:
 
-  📦 TechNova Pro License
+  TechNova Pro License
      Price: $199.99
      Yearly Subscription: $1,499.00
      Enterprise: $24,999.99
-     
-  📦 TechNova Cloud Storage
+
+  TechNova Cloud Storage
      Basic (100GB): $9.99/month
      Pro (1TB): $29.99/month
      Enterprise: $1,234.56/month
-     
-  📦 One-time Products
+
+  One-time Products
      USB Dongle: $49.99
      Training Manual: $125.00
      Conference Pack: $2,500.00
@@ -84,17 +84,17 @@ Issue: API returning 500 error at https://api.technova.io/v2/users?limit=100
         <h1>Welcome to TechNova!</h1>
         <img src="logo.png" alt="TechNova Logo" />
     </div>
-    
+
     <p class="intro">
         Thank you for subscribing to our newsletter.
     </p>
-    
+
     <div class="content">
         <a href="https://www.technova.com/subscribe">Subscribe Now</a>
         <br/>
         <hr />
     </div>
-    
+
     <footer>
         <p>Contact: newsletter@technova.com</p>
         <span class="social">Follow us: #TechNovaNews</span>
@@ -110,9 +110,9 @@ Check out the press release: https://www.technova.com/press/2024/partnership
 Contact: press@technova.com"
 
 @DevTeamLead posted:
-"Just shipped version 2.0! 🚀 #ReleaseDay #Coding #Python
+"Just shipped version 2.0! #ReleaseDay #Coding #Python
 Thanks to the whole team! Meeting at 3:30 PM to celebrate.
-Call the office at 555-TECH-001 (555-832-4001) for info."
+Call the office at 555-832-4001 for info."
 
 Community hashtags: #TechCommunity #OpenSource #DevOps #Agile #Startup
 
@@ -126,14 +126,12 @@ Customer Information:
   Name: David Wilson
   Email: david.wilson+orders@gmail.com
   Phone: +1 (415) 555-7890
-  
+
 Billing Information:
   Card: 5425-2334-3010-9903
   Exp: 12/27
   Amount Charged: $3,456.78
-  
-  Alternative Card: 3782 822463 10005
-  
+
 Shipping Address:
   123 Tech Street
   San Francisco, CA 94102
@@ -142,7 +140,7 @@ Items:
   1x TechNova Pro License    $199.99
   2x Cloud Storage Pro       $59.98
   1x Enterprise Package    $3,196.81
-  
+
 Order placed at 22:45 (UTC)
 Expected delivery by 09:00 on Feb 10.
 
@@ -160,25 +158,52 @@ Action Items:
   1. Review PR at https://github.com/technova/main/pull/1234
   2. Update docs at https://docs.technova.io/api/v2/#authentication
   3. Call client at (650) 555-3456 by 4:00 PM
-  
+
 Next meeting: 14:00 tomorrow
 
 Follow-up hashtags for project tracking:
 #SprintReview #Q1Goals #Roadmap2024
 
---- SECTION 8: SECURITY TEST DATA ---
+--- SECTION 8: ALU COMMUNITY CONTACTS ---
+*** African Leadership University — Staff, Alumni & Social Innovation Network ***
+
+Faculty and Staff (Official):
+  Dean of Studies:      d.hakizimana@alueducation.com
+  Head of Programs:     p.nkurunziza@alueducation.com
+  Academic Advisor:     advising@alueducation.com
+  IT Support:           itsupport@alueducation.com
+  Finance Office:       finance.office@alueducation.com
+
+Alumni Network:
+  Alumni Coordinator:   j.uwimana@alumni.alueducation.com
+  Class of 2023 Rep:    a.mutoni@alumni.alueducation.com
+  Alumni Newsletter:    news@alumni.alueducation.com
+  Career Services:      careers@alumni.alueducation.com
+
+Social Innovation Hub (SI):
+  SI Coordinator:       si.team@si.alueducation.com
+  Project Lead:         r.gasana@si.alueducation.com
+  Partnerships:         partnerships@si.alueducation.com
+
+ALU Validation Edge Cases (should NOT be matched as valid ALU):
+  Missing username:     @alueducation.com
+  Wrong TLD structure:  user@alu.education.com
+  Lookalike domain:     user@alueducation.co
+  Double-at malformed:  user@@alueducation.com
+
+--- SECTION 9: SECURITY TEST DATA ---
 *** WARNING: This section contains test data for security validation ***
 
 Test Case 1 - SQL Injection Attempts (should be detected):
   Username: admin' OR 1=1 --
   Search: '; DROP TABLE users; --
   Query: UNION SELECT * FROM passwords
-  
+
 Test Case 2 - XSS Attempts (should be detected):
   Comment: <script>alert('XSS')</script>
   Profile: <img src=x onerror="alert('hacked')">
   Link: javascript:void(document.cookie)
-  
+
 Test Case 3 - Dangerous HTML:
   <iframe src="https://malicious-site.com"></iframe>
   <object data="malware.swf"></object>
@@ -193,9 +218,7 @@ Test Case 4 - Malformed Inputs (should NOT be extracted):
   Invalid email: @nodomain.com
   Fake phone: 1234567890123 (too many digits)
   Not a card: 1234 5678 (too short)
-  Not currency: $abc.def
   Invalid time: 25:99 (out of range)
-  Invalid time: 13:00 AM (impossible)
 
 Test Case 5 - Edge Cases (SHOULD be extracted correctly):
   Valid complex email: user.name+tag@subdomain.example.co.uk

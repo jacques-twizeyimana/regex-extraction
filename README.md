@@ -1,92 +1,163 @@
 # Regex Data Extraction & Secure Validation Tool
 
-Welcome to my data extraction tool. It extracts structured data (like emails and credit cards) from raw text and look for malicious input.
+A Python tool that extracts structured data from raw text using regex, validates ALU-specific email addresses, and detects hostile or malformed input before it can reach downstream systems.
+
+## Project Structure
+
+```
+alu-regex-data-extraction_jacques-twizeyimana/
+├── input/
+│   └── raw-text.txt          # Sample production-style input text
+├── src/
+│   └── main.py               # Extraction, validation, and security logic
+├── output/
+│   └── sample-output.json    # Pre-generated results for verification
+└── README.md
+```
 
 ## Running the Tool
 
-The easiest way to see it in action is to run it against the included sample data:
-
 ```bash
-# Process the sample input file
-python3 regex_extractor.py sample_input.txt
+# Run against the included sample data (default)
+python3 src/main.py
+
+# Specify a custom input file
+python3 src/main.py path/to/input.txt
+
+# Specify both input and output paths
+python3 src/main.py path/to/input.txt path/to/output.json
 ```
 
-This will print a readable report to your console and save a detailed JSON file (`sample_output.json`) with the results.
+The script prints a readable report to the console and saves a detailed JSON file to `output/sample-output.json`.
 
 ## What It Extracts
 
-I've designed regex patterns to identify and extract these six specific data types:
+Six data types are extracted using purpose-built regex patterns:
 
 | Data Type        | Example Matches                                       |
 | ---------------- | ----------------------------------------------------- |
 | **Emails**       | `jane.doe@company.com`, `contact+sales@site.org`      |
 | **URLs**         | `https://www.google.com`, `http://localhost:8080/api` |
-| **Phones**       | `(555) 123-4567`, `+1 555-0199`, `123.456.7890`       |
+| **Phone Numbers**| `(555) 123-4567`, `+1 555-0199`, `123.456.7890`       |
 | **Credit Cards** | `1234 5678 9012 3456`, `1234-5678-9012-3456`          |
 | **HTML Tags**    | `<div class="main">`, `<img src="logo.png" />`        |
 | **Hashtags**     | `#Python`, `#coding_is_fun`                           |
 
+## ALU-Specific Email Validation
+
+In addition to general email extraction, the tool validates and classifies ALU email addresses into three distinct categories:
+
+| Category | Domain | Description |
+|----------|--------|-------------|
+| **Official** | `@alueducation.com` | Current staff and students |
+| **Alumni** | `@alumni.alueducation.com` | Graduates of ALU programmes |
+| **SI** | `@si.alueducation.com` | Social Innovation Hub members |
+
+Each pattern is anchored tightly so that lookalike or mistyped domains are rejected:
+
+- `user@alu.education.com` — **rejected** (different domain structure)
+- `user@alueducation.co` — **rejected** (wrong TLD)
+- `@alueducation.com` — **rejected** (missing local part)
+- `user@@alueducation.com` — **rejected** (malformed double-at)
+
+ALU results appear in the output under `alu_email_validation` as a separate block from general emails.
+
 ## Security Features
 
-This isn't just a simple extraction script. Input from external sources is rarely trustworthy, so I've engineered this tool with several defensive layers:
+Input from external APIs is never automatically trusted. The tool defends against three categories of hostile input:
 
 ### 1. Sensitive Data Masking
 
-To prevent accidental exposure in logs or console output, sensitive data is partially hidden.
+Sensitive fields are partially hidden in all output to prevent accidental exposure in logs:
 
-- **Credit Cards:** Automatically masked, showing only the last 4 digits (e.g., `**** **** **** 1234`).
-- **Emails:** The username is partially hidden (e.g., `jan***@example.com`).
+- **Credit cards** — only the last 4 digits are shown: `**** **** **** 1234`
+- **Email addresses** — the local part is partially hidden: `jan***@example.com`
+- **Phone numbers** — all but the last 4 digits are masked: `******4567`
 
-### 2. Threat Detection
+### 2. Injection Detection
 
-The tool scans for patterns that indicate common attacks.
+The security scan runs **before** any extraction. If threats are found, they are reported and the overall result is flagged `"is_safe": false`.
 
-- **SQL Injection:** Detects attempts like `OR 1=1`, `UNION SELECT`, or `DROP TABLE`.
-- **XSS (Cross-Site Scripting):** Blocks `<script>` tags, `javascript:` URIs, and dangerous event handlers like `onload`.
+- **SQL Injection** — detects `UNION SELECT`, `OR 1=1`, `DROP TABLE`, `--` comments, and similar patterns
+- **XSS (Cross-Site Scripting)** — detects `<script>` tags, `javascript:` URIs, and inline event handlers such as `onerror=`
 
-### 3. Safe Output
+### 3. Safe Console Output
 
-Extracted text is sanitized when printed to the console. Special HTML characters are escaped so that a malicious string like `<script>alert(1)</script>` is rendered as literal text rather than being executed as code.
+Text is HTML-escaped before printing to the console. A malicious string like `<script>alert(1)</script>` is rendered as `&lt;script&gt;alert(1)&lt;/script&gt;` rather than being passed through verbatim.
 
-## Under the Hood: Regex Implementation
-
-Below are the regex patterns used for extraction, balanced for flexibility and security.
+## Regex Patterns Explained
 
 ### Email Address
 
-- **Regex**: `\b[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}\b`
-- **Logic**: Matches the standard `user@domain.tld` structure. It ensures the top-level domain is at least two letters long and allows common symbols in the local part like dots, pluses, and underscores.
+```
+\b[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}\b
+```
 
-### Secure URLs
+Matches the standard `user@domain.tld` structure. Requires the TLD to be at least two letters and allows common symbols (`.`, `+`, `_`) in the local part.
 
-- **Regex**: `\bhttps?://(?:www\.)?[a-zA-Z0-9][-a-zA-Z0-9]*(?:\.[a-zA-Z0-9][-a-zA-Z0-9]*)*(?:\.[a-zA-Z]{2,})?(?::\d{1,5})?(?:/[^\s<>"']*)?`
-- **Logic**: Strictly allows only `http` and `https` protocols to prevent protocol-based attacks (like `javascript:` or `file://`). It handles optional subdomains, ports, and complex paths.
+### ALU Official Email
+
+```
+\b[a-zA-Z0-9._%+-]+@alueducation\.com\b
+```
+
+Anchors the domain exactly to `alueducation.com`. The escaped dot prevents `alueducationXcom` from matching.
+
+### ALU Alumni Email
+
+```
+\b[a-zA-Z0-9._%+-]+@alumni\.alueducation\.com\b
+```
+
+Requires the full subdomain `alumni.alueducation.com`. Rejects addresses that only match the parent domain.
+
+### ALU SI Email
+
+```
+\b[a-zA-Z0-9._%+-]+@si\.alueducation\.com\b
+```
+
+Same anchoring strategy applied to the `si` subdomain.
+
+### URLs
+
+```
+\bhttps?://(?:www\.)?[a-zA-Z0-9][-a-zA-Z0-9]*...
+```
+
+Strictly allows only `http` and `https` protocols. This excludes `javascript:`, `file://`, `data:`, and other schemes that could be exploited.
 
 ### Credit Card Numbers
 
-- **Regex**: `\b(?:\d{4}[\s-]?){3}\d{4}\b`
-- **Logic**: Identifies 16-digit sequences grouped in fours. It accepts spaces or hyphens as separators, which are standard in manual entry.
+```
+\b(?:\d{4}[\s-]?){3}\d{4}\b
+```
+
+Matches 16-digit numbers in groups of four, separated by optional spaces or dashes (the two most common manual-entry formats).
 
 ### Phone Numbers
 
-- **Regex**: `(?:\+1[\s.-]?)?\(?[0-9]{3}\)?[\s.-]?[0-9]{3}[\s.-]?[0-9]{4}\b`
-- **Logic**: Supports multiple US formats including area codes in parentheses, dot/dash/space separators, and the optional `+1` country code.
+```
+(?:\+1[\s.-]?)?\(?[0-9]{3}\)?[\s.-]?[0-9]{3}[\s.-]?[0-9]{4}\b
+```
+
+Handles US formats including area codes in parentheses, dot/dash/space separators, and the optional `+1` country code.
 
 ### HTML Tags
 
-- **Regex**: `</?[a-zA-Z][a-zA-Z0-9]*(?:\s+[^>]*)?\s*/?>`
-- **Logic**: Captures opening, closing, and self-closing tags. It allows for any number of attributes within the tag.
+```
+</?[a-zA-Z][a-zA-Z0-9]*(?:\s+[^>]*)?\s*/?>
+```
+
+Captures opening, closing, and self-closing tags along with their attributes. Tags from the dangerous set (`script`, `iframe`, `object`, `embed`, `form`, `meta`, `link`, `style`) are flagged as security warnings.
 
 ### Hashtags
 
-- **Regex**: `#[a-zA-Z_][a-zA-Z0-9_]*\b`
-- **Logic**: Matches words starting with `#`. It requires the first character after the hash to be a letter or underscore, preventing numeric-only tags (like #123) from being flagged.
+```
+#[a-zA-Z_][a-zA-Z0-9_]*\b
+```
 
-## Project Structure
-
-- `regex_extractor.py`: The main Python script containing extraction and security logic.
-- `sample_input.txt`: A test file with mixed valid and malicious data.
-- `sample_output.json`: The structured results generated by the tool.
+Requires the first character after `#` to be a letter or underscore, preventing bare numeric tokens like `#123` from being treated as hashtags.
 
 ## Author
 

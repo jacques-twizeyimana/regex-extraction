@@ -14,6 +14,7 @@
       "--",
       "--",
       "--",
+      "--",
       "DROP TABLE",
       "; --"
     ],
@@ -38,11 +39,44 @@
       "<form action=\"https://phishing-site.com/steal\">",
       "</form>"
     ],
-    "warning": "SECURITY ALERT: Potentially malicious content detected in input. Review the injection attempts above."
+    "warning": "SECURITY ALERT: Potentially malicious content detected. Review the injection attempts listed above before processing further."
+  },
+  "alu_email_validation": {
+    "official": {
+      "domain": "@alueducation.com",
+      "count": 5,
+      "addresses": [
+        "d.hakizimana@alueducation.com",
+        "p.nkurunziza@alueducation.com",
+        "advising@alueducation.com",
+        "itsupport@alueducation.com",
+        "finance.office@alueducation.com"
+      ]
+    },
+    "alumni": {
+      "domain": "@alumni.alueducation.com",
+      "count": 4,
+      "addresses": [
+        "j.uwimana@alumni.alueducation.com",
+        "a.mutoni@alumni.alueducation.com",
+        "news@alumni.alueducation.com",
+        "careers@alumni.alueducation.com"
+      ]
+    },
+    "si": {
+      "domain": "@si.alueducation.com",
+      "count": 3,
+      "addresses": [
+        "si.team@si.alueducation.com",
+        "r.gasana@si.alueducation.com",
+        "partnerships@si.alueducation.com"
+      ]
+    },
+    "total_alu_addresses": 12
   },
   "extracted_data": {
     "emails": {
-      "count": 15,
+      "count": 29,
       "items": [
         "joh*******@technova.com",
         "sar**********@technova.co.uk",
@@ -58,6 +92,20 @@
         "emm******@technova.com",
         "fra*********@technova.com",
         "gra******@technova.co.uk",
+        "d.h*********@alueducation.com",
+        "p.n*********@alueducation.com",
+        "adv*****@alueducation.com",
+        "its******@alueducation.com",
+        "fin***********@alueducation.com",
+        "j.u******@alumni.alueducation.com",
+        "a.m*****@alumni.alueducation.com",
+        "new*@alumni.alueducation.com",
+        "car****@alumni.alueducation.com",
+        "si.****@si.alueducation.com",
+        "r.g*****@si.alueducation.com",
+        "par*********@si.alueducation.com",
+        "use*@alu.education.com",
+        "use*@alueducation.co",
         "use**********@subdomain.example.co.uk"
       ],
       "security_warnings": []
@@ -199,7 +247,7 @@
     }
   },
   "statistics": {
-    "total_items_found": 105,
+    "total_items_found": 119,
     "security_warnings": 13
   }
 }
